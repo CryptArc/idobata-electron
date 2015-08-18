@@ -1,17 +1,24 @@
 (function(){
   var onMessageCreated = function(session, store) {
     return function(data) {
-      var mode = 'all';
+      // TODO need to persist configuration changed…
+      var mode = window.idobataElectron.notificationMode || 'never';
       var notify = false;
-      if (mode == "all") {
+
+      if (mode == 'all') {
         notify = true;
-      } else if (mode == "mention") {
+      } else if (mode == 'mention') {
+        mentions = data.message.mentions
+        user = session.user.id
+
         if (data.message.mentions.indexOf(parseInt(session.user.id)) >= 0) {
           notify = true;
         }
       }
+
       if (notify) {
         var title = data.message.senderName;
+
         new Notification(title, {
           body: data.message.bodyPlain,
           icon: data.message.senderIconUrl

@@ -1,5 +1,13 @@
 var remote = require('remote');
 var Menu = remote.require('menu');
+var webView  = document.getElementById('idobata');
+
+var onClick = function (mode) {
+  return function () {
+    webView.executeJavaScript('window.idobataElectron = {notificationMode: "' + mode + '"};');
+  }
+}
+
 var template = [
   {
     label: 'idobata-electron',
@@ -7,6 +15,31 @@ var template = [
       {
         label: 'About idobata-electron',
         selector: 'orderFrontStandardAboutPanel:'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Notification',
+        submenu: [
+          {
+            label: 'All messages',
+            type: 'radio',
+            click: onClick('all')
+          },
+          {
+            label: 'Mentions',
+            type: 'radio',
+            click: onClick('mention')
+          },
+          {
+            label: 'Never',
+            type: 'radio',
+            checked: true,
+            click: onClick('never')
+          }
+        ],
+        accelerator: 'Command+,'
       },
       {
         type: 'separator'
