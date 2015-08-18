@@ -1,22 +1,21 @@
 (function(){
   var onMessageCreated = function(session, store) {
+    var isNotify = function(mode, mentions) {
+      switch (mode) {
+        case 'all':
+          return true;
+        case 'mention':
+          return (mentions.indexOf(parseInt(session.user.id)) >= 0) ? true : false
+        case 'never':
+          return false
+      }
+    }
+
     return function(data) {
       // TODO need to persist configuration changed…
       var mode = window.idobataElectron.notificationMode || 'never';
-      var notify = false;
 
-      if (mode == 'all') {
-        notify = true;
-      } else if (mode == 'mention') {
-        mentions = data.message.mentions
-        user = session.user.id
-
-        if (data.message.mentions.indexOf(parseInt(session.user.id)) >= 0) {
-          notify = true;
-        }
-      }
-
-      if (notify) {
+      if (isNotify(mode, data.message.mentions)) {
         var title = data.message.senderName;
 
         new Notification(title, {
