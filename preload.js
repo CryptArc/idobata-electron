@@ -1,4 +1,13 @@
 (function(){
+  window.addEventListener('ready.idobata', function(e) {
+    var container = e.detail.container;
+    var pusher  = container.lookup('pusher:main');
+    var session = container.lookup('service:session');
+    var store   = container.lookup('store:main');
+
+    pusher.bind('message:created', onMessageCreated(session, store));
+  });
+
   var onMessageCreated = function(session, store) {
     var isNotify = function(mode, mentions) {
       switch (mode) {
@@ -25,13 +34,4 @@
       };
     }
   };
-
-  window.addEventListener('ready.idobata', function(e) {
-    var container = e.detail.container;
-    var pusher  = container.lookup('pusher:main');
-    var session = container.lookup('service:session');
-    var store   = container.lookup('store:main');
-
-    pusher.bind('message:created', onMessageCreated(session, store));
-  });
 })();
