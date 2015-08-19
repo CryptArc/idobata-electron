@@ -21,7 +21,6 @@
     }
 
     return function(data) {
-      // TODO need to persist configuration changed…
       var mode = window.idobataElectron.notificationMode || 'never';
 
       if (isNotify(mode, data.message.mentions)) {

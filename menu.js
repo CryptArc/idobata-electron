@@ -1,8 +1,11 @@
 var remote = require('remote');
+var ipc = remote.require('ipc')
 var Menu = remote.require('menu');
 
 var onClick = function (mode) {
   return function () {
+    ipc.emit('setNotificationMode', mode);
+
     document.getElementById('idobata').executeJavaScript('window.idobataElectron = {notificationMode: "' + mode + '"};');
   }
 }
