@@ -34,3 +34,13 @@ ipc.on('setNotificationMode', function(mode) {
     });
   });
 });
+
+ipc.on('getNotificationMode', function(event) {
+  var config_path = path.join(app.getPath('userData'), 'config');
+
+  fs.readFile(config_path, function(_, data) {
+    var config = data ? JSON.parse(data) : {notificationMode: 'never'};
+
+    event.returnValue = config.notificationMode;
+  });
+});

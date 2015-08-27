@@ -1,5 +1,8 @@
+var ipc = require('ipc');
+
 (function(){
   window.addEventListener('ready.idobata', function(e) {
+    // XXX ipc モジュールで main プロセスに渡すことも出来るのだけど、そうすると container の中身が取れなかったりする…
     var container = e.detail.container;
     var pusher  = container.lookup('pusher:main');
     var session = container.lookup('service:session');
@@ -22,9 +25,7 @@
 
     return function(data) {
       var message = data.message
-
-      // XXX 設定ファイルから読み込む
-      var mode = window.idobataElectron.notificationMode || 'never';
+      var mode = ipc.sendSync('getNotificationMode');
 
       if (isNotify(mode, message.mentions)) {
         var title = data.message.sender_name;
