@@ -3,7 +3,7 @@
     var container = e.detail.container;
     var pusher  = container.lookup('pusher:main');
     var session = container.lookup('service:session');
-    var store   = container.lookup('store:main');
+    var store   = container.lookup('service:store');
 
     pusher.bind('message:created', onMessageCreated(session, store));
   });
@@ -21,14 +21,17 @@
     }
 
     return function(data) {
+      var message = data.message
+
+      // XXX 設定ファイルから読み込む
       var mode = window.idobataElectron.notificationMode || 'never';
 
-      if (isNotify(mode, data.message.mentions)) {
-        var title = data.message.senderName;
+      if (isNotify(mode, message.mentions)) {
+        var title = data.message.sender_name;
 
         new Notification(title, {
-          body: data.message.bodyPlain,
-          icon: data.message.senderIconUrl
+          body: data.message.body_plain,
+          icon: data.message.sender_icon_url
         });
       };
     }
